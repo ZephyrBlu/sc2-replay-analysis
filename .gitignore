@@ -3,4 +3,4 @@ __pycache__/
 Build Analysis/
 replays/
 timelines/
-recursive_parse.txt
+recursive_parse.log

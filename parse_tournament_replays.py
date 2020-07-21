@@ -48,6 +48,8 @@ def generate_prediction_data(players, timeline, stats, metadata, path):
 def handle_replay(path, player_names, identifiers):
     try:
         players, timeline, engagements, stats, metadata = parse_replay(path, local=True)
+        if not players:
+            return {}
     except Exception:
         return {}
     return generate_prediction_data(players, timeline, stats, metadata, path)
