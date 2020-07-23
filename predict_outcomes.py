@@ -16,9 +16,11 @@ def predict_match(model, prediction_data):
         # remove avg_collection_rate value
         filtered_data = deepcopy(prediction_data['data'][i])
         filtered_data.pop(7)
+
         raw_prediction = model.predict([filtered_data]).tolist()[0]
-        # raw_probability = model.predict_proba([filtered_data]).tolist()[0]
-        raw_probability = (0, 0)
+        # SVM doesn't do probability
+        raw_probability = model.predict_proba([filtered_data]).tolist()[0]
+        # raw_probability = (0, 0)
 
         predicted = (i + 1) if raw_prediction is True else prediction_data['winner']
         if predicted == (i + 1):
@@ -44,21 +46,21 @@ def predict_outcomes():
         lr_model = joblib.load('predict_outcome_lr.joblib')
         rf_model = joblib.load('predict_outcome_rf.joblib')
         nb_model = joblib.load('predict_outcome_nb.joblib')
-        svm_model = joblib.load('predict_outcome_svm.joblib')
+        # svm_model = joblib.load('predict_outcome_svm.joblib')
 
         lr_predicted = []
         rf_predicted = []
         nb_predicted = []
-        svm_predicted = []
+        # svm_predicted = []
         for match_data in data:
             lr_predicted.append(predict_match(lr_model, match_data))
             rf_predicted.append(predict_match(rf_model, match_data))
             nb_predicted.append(predict_match(nb_model, match_data))
-            svm_predicted.append(predict_match(svm_model, match_data))
+            # svm_predicted.append(predict_match(svm_model, match_data))
 
         print(f'{len(data)} replays')
 
-        for predicted in [lr_predicted, rf_predicted, nb_predicted, svm_predicted]:
+        for predicted in [lr_predicted, rf_predicted, nb_predicted]:
             matching = 0
             diverge = 0
             consensus = 0
@@ -81,6 +83,9 @@ def predict_outcomes():
             print(f'Overall Accuracy: {round(correct / (len(data) * 2), 3) * 100}% ({correct}/{len(data) * 2})')
             print(f'Match predictions agreed {round(matching / len(data), 3) * 100}% of the time')
             print(f'When match predictions agreed, they were right {round(consensus / matching, 3) * 100}% of the time\n')
+
+        with open('predictions.json', 'w') as outcome_data:
+            json.dump({'data': lr_predicted}, outcome_data, ensure_ascii=False, indent=4)
 
 
 predict_outcomes()
