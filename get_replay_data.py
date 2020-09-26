@@ -112,7 +112,7 @@ for count, r in enumerate(replays):
         continue
 
     try:
-        with open(f'C:/Users/Luke/Desktop/SC2 Replay Parser/Replay Data Analysis/timelines/{r.file_hash}.json.gz', 'r') as replay_timeline:
+        with open(f'C:/Users/Luke/Desktop/Replay Data Analysis/timelines/{r.file_hash}.json.gz', 'r') as replay_timeline:
             print(f'Opening timeline file {count + 1}')
             summary_metrics = calc_summary_metrics(r, json.load(replay_timeline)['timeline'])
 
@@ -134,7 +134,7 @@ for count, r in enumerate(replays):
     except FileNotFoundError:
         missing_timelines += 1
 
-with open('C:/Users/Luke/Desktop/SC2 Replay Parser/Replay Data Analysis/replay_data.json', 'w', encoding='utf-8') as replay_summary:
+with open('C:/Users/Luke/Desktop/Replay Data Analysis/replay_data.json', 'w', encoding='utf-8') as replay_summary:
     json.dump({'data': replay_data}, replay_summary, ensure_ascii=False, indent=4)
 
 end = time.time()

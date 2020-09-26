@@ -4,3 +4,4 @@ Build Analysis/
 replays/
 timelines/
 recursive_parse.log
+*.json
